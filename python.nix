@@ -27,6 +27,7 @@ pkgs.mkShell {
   poetry add pytest pytest-cov --group test
   poetry add flake8 black pre-commit --group development
 
+  poetry install --no-root
   # Check for .git, init if not present.
   if [ -d ./.git ]; then
     echo "Already a GIT repository."
@@ -54,5 +55,4 @@ pkgs.mkShell {
 
   echo "All set! You are good to go. Enjoy your journey!"
   '';
-
 }
