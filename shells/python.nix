@@ -7,6 +7,7 @@ pkgs.mkShell {
     pkgs.python311
     pkgs.poetry
   ];
+
   shellHook = ''
 
   echo "Hello dear friend, you are about to start an amazing journey..."
@@ -38,17 +39,17 @@ pkgs.mkShell {
   # Check for pre-commit-config, create if not present:
   FILE="pre-commit-config.yaml"
 
-  if [ -f "$FILE" ]
+  if [ -f "$FILE" ] || [ -f ".$FILE" ]
   then
     echo "Pre-commit configuration exists already."
   else
-    echo "Creating the pre-commit-config.yaml..."
-    echo "repos:" >> pre-commit-config.yaml
-    echo "    - repo: https://github.com/pycqa/flake8.git" >> pre-commit-config.yaml
-    echo "      rev: 3.9.2" >> pre-commit-config.yaml 
-    echo "      hooks:" >> pre-commit-config.yaml
-    echo "        - id: flake8" >> pre-commit-config.yaml
-    echo "          exclude: ^venv/|^env/|.*test.*" >> pre-commit-config.yaml
+    echo "Creating .pre-commit-config.yaml..."
+    echo "repos:" >> .$FILE
+    echo "    - repo: https://github.com/pycqa/flake8.git" >> .$FILE
+    echo "      rev: 3.9.2" >> .$FILE
+    echo "      hooks:" >> .$FILE
+    echo "        - id: flake8" >> .$FILE
+    echo "          exclude: ^venv/|^env/|.*test.*" >> .$FILE
   fi
 
   poetry run pre-commit install
