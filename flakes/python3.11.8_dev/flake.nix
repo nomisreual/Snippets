@@ -18,52 +18,44 @@
           pkgs.poetry
         ];
         shellHook = ''
+echo "Setting you up..."
 
-        echo "Hello dear friend, you are about to start an amazing journey..."
+# Deleting commonly used virtual environment names
+rm -rf env
+rm -rf venv
+rm -rf .venv
+rm -rf .env
 
-        poetry config virtualenvs.in-project true
-        if [ -f pyproject.toml ]; then
-          echo "Poetry already initialized."
-        else
-          poetry init -n
-        fi
+# Virtual environment inside the project root:
+poetry config virtualenvs.in-project true
 
-        # Deleting commonly used virtual environment names
-        rm -rf env
-        rm -rf venv
-        rm -rf .venv
-        rm -rf .env
-        
-        poetry add pytest pytest-cov --group test
-        poetry add flake8 black pre-commit --group development
+# Init poetry if it isn't already:
+if [ -f pyproject.toml ]; then
+  echo "Poetry already initialized."
+else
+  poetry init -n
+fi
 
-        poetry install --no-root
-        # Check for .git, init if not present.
-        if [ -d ./.git ]; then
-          echo "Already a GIT repository."
-        else
-          git init
-        fi
+# Add test dependencies:
+poetry add pytest pytest-cov --group test
 
-        # Check for pre-commit-config, create if not present:
-        FILE="pre-commit-config.yaml"
+# Add development dependencies:
+poetry add flake8 black pre-commit --group development
 
-        if [ -f "$FILE" ] || [ -f ".$FILE" ]
-        then
-          echo "Pre-commit configuration exists already."
-        else
-          echo "Creating .pre-commit-config.yaml..."
-          echo "repos:" >> .$FILE
-          echo "    - repo: https://github.com/pycqa/flake8.git" >> .$FILE
-          echo "      rev: 3.9.2" >> .$FILE
-          echo "      hooks:" >> .$FILE
-          echo "        - id: flake8" >> .$FILE
-          echo "          exclude: ^venv/|^env/|.*test.*" >> .$FILE
-        fi
+poetry install --no-root
 
-        poetry run pre-commit install
+# Check for .git, init if not present.
+if [ -d ./.git ]; then
+  echo "Already a GIT repository."
+else
+  git init
+fi
 
-        echo "All set! You are good to go. Enjoy your journey!"
+poetry run pre-commit install
+poetry run pre-commit install --hook-type commit-msg
+
+echo "All set! You are good to go. Enjoy your journey!"
+
         '';
       };
 
