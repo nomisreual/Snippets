@@ -38,42 +38,6 @@ python_version="^$major_minor"
 
 sed -i "s/python = \".*\"/python = \"$python_version\"/g" pyproject.toml
 
-# Copy over the configuration files:
-echo "Copying over configuration files..."
-echo ""
-
-# Flake8
-if [ -f ./.flake8 ]; then
-  echo ".flake8 already exists."
-  echo ""
-else
-  echo "Copying .flake8..."
-  echo ""
-  cp ${./.flake8} ./.flake8
-fi
-
-# Pre-commit-config
-PRECOMMIT="pre-commit-config.yaml"
-
-if [ -f "$PRECOMMIT" ] || [ -f ".$PRECOMMIT" ]; then
-  echo "A pre-commit config file already exists."
-  echo ""
-else
-  echo "Copying .pre-commit-config.yaml..."
-  echo ""
-  cp ${./.pre-commit-config.yaml} ./.pre-commit-config.yaml
-fi
-
-# Gitignore
-if [ -f ./.gitignore ]; then
-  echo ".gitignore already exists."
-  echo ""
-else
-  echo "Copying .gitignore..."
-  echo ""
-  cp ${./.gitignore} ./.gitignore
-fi
-
 # Add test dependencies:
 poetry add pytest pytest-cov --group test 2>/dev/null
 
